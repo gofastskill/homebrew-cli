@@ -10,7 +10,7 @@ class Fastskill < Formula
   on_linux do
     if Hardware::CPU.intel?
       url "https://github.com/gofastskill/fastskill/releases/download/v0.7.10/fastskill-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "d5d8dd7590e5fd9afa3b15b36750ba2de8aedecd4cd37348e4a1242b9fca9d55"
+      sha256 "sha256:66b5d14600c607618431e851dcf5f19be7d602eab94171237033073e442ce945"
     end
   end
 
