@@ -14,6 +14,10 @@ brew install gofastskill/cli/fastskill
 fastskill --version
 ```
 
+For detailed usage and documentation, please refer to:
+- GitHub: https://github.com/gofastskill
+- Documentation: https://docs.gofastskill.com/
+
 ## Upgrading
 
 ```bash
