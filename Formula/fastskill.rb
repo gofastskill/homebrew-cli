@@ -20,10 +20,10 @@ class Fastskill < Formula
 
       if glibc_version >= 2.38
         url "https://github.com/gofastskill/fastskill/releases/download/v0.9.16/fastskill-x86_64-unknown-linux-gnu.tar.gz"
-        sha256 "16f3e6e48cb5e8995eb68c461e8e81aef85a14df99902b8d6013f3ab89cd6c4a"
+        sha256 "5172ab7ba4263dc94ded3955d0c507a2355d7ada328c2ad6fb785392115e4cc3"
       else
         url "https://github.com/gofastskill/fastskill/releases/download/v0.9.16/fastskill-x86_64-unknown-linux-musl.tar.gz"
-        sha256 "4457031344ce437edeac3b655f54dcc185a8dcba2c3ce464c7adf4aab4cf98a9"
+        sha256 "26a45b9c54906cd1ad3a0ad67efc4f2a2eaf24610ba1b0fdfb79efe9781e6854"
       end
     end
   end
