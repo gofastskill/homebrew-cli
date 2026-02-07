@@ -4,7 +4,7 @@
 class Fastskill < Formula
   desc "Fastskill - A fast skill management tool"
   homepage "https://github.com/gofastskill/fastskill"
-  version "0.9.52"
+  version "0.9.53"
   license "Apache-2.0"
 
   on_linux do
@@ -19,11 +19,11 @@ class Fastskill < Formula
       end
 
       if glibc_version >= 2.38
-        url "https://github.com/gofastskill/fastskill/releases/download/v0.9.52/fastskill-x86_64-unknown-linux-gnu.tar.gz"
-        sha256 "4fd7b53d288e1d0f3fd7f3ed50848e6251d25aba1406106a7814ccba54c4d300"
+        url "https://github.com/gofastskill/fastskill/releases/download/v0.9.53/fastskill-x86_64-unknown-linux-gnu.tar.gz"
+        sha256 "3dd1eb7c06fcee19ab8b07f305dac0977635baf1d5f3a30c08b2a3fae81de92b"
       else
-        url "https://github.com/gofastskill/fastskill/releases/download/v0.9.52/fastskill-x86_64-unknown-linux-musl.tar.gz"
-        sha256 "1e55de3214383ea430681a22a398a66e54c321fe1471974c6f54672785bfc55c"
+        url "https://github.com/gofastskill/fastskill/releases/download/v0.9.53/fastskill-x86_64-unknown-linux-musl.tar.gz"
+        sha256 "c498df9b96ae5e186eec8817772911fd32dedd3b0c2b0a4ad20f2f912dbaa46e"
       end
     end
   end
