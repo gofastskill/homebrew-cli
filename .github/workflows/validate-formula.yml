@@ -1,5 +1,5 @@
 name: Validate Formula
-run-name: Validate formula for ${{ github.event.inputs.version || "current-formula" }}
+run-name: Validate formula for ${{ github.event.inputs.version }}
 
 on:
   workflow_dispatch:
