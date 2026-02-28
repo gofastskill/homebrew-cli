@@ -42,6 +42,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          brew untap gofastskill/cli || true
           brew tap gofastskill/cli "$(pwd)"
           brew tap
 
