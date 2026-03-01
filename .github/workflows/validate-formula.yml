@@ -38,26 +38,15 @@ jobs:
           echo "value=$EXPECTED" >> "$GITHUB_OUTPUT"
           echo "Expected version: $EXPECTED"
 
-      - name: Tap branch from local checkout
-        shell: bash
-        run: |
-          set -euo pipefail
-          TAP_DIR="$RUNNER_TEMP/homebrew-cli"
-          rm -rf "$TAP_DIR"
-          git clone --depth=1 --branch "${{ github.ref_name }}" https://github.com/gofastskill/homebrew-cli "$TAP_DIR"
-          brew untap gofastskill/cli || true
-          brew tap gofastskill/cli "$TAP_DIR"
-          brew tap
-
       - name: Audit formula
         shell: bash
-        run: brew audit --strict gofastskill/cli/fastskill
+        run: brew audit --strict ./Formula/fastskill.rb
 
       - name: Install formula
         shell: bash
         run: |
           set -euo pipefail
-          brew install --build-from-source gofastskill/cli/fastskill
+          brew install --build-from-source ./Formula/fastskill.rb
 
       - name: Verify installed version
         shell: bash
@@ -78,9 +67,3 @@ jobs:
           fi
 
           echo "Installed fastskill version matches expected: $INSTALLED"
-
-      - name: Cleanup tap
-        if: always()
-        shell: bash
-        run: |
-          brew untap gofastskill/cli || true
