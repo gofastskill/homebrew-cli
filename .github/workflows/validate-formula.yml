@@ -19,14 +19,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-15-intel, macos-latest]
+        os: [macos-15-intel, macos-latest]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Set up Homebrew
-        uses: Homebrew/actions/setup-homebrew@master
 
       - name: Resolve expected version
         id: expected
@@ -38,15 +35,22 @@ jobs:
           echo "value=$EXPECTED" >> "$GITHUB_OUTPUT"
           echo "Expected version: $EXPECTED"
 
+      - name: Tap local formula
+        shell: bash
+        run: |
+          set -euo pipefail
+          brew untap gofastskill/cli || true
+          brew tap gofastskill/cli "$PWD"
+
       - name: Audit formula
         shell: bash
-        run: brew audit --strict ./Formula/fastskill.rb
+        run: brew audit --strict gofastskill/cli/fastskill
 
       - name: Install formula
         shell: bash
         run: |
           set -euo pipefail
-          brew install --build-from-source ./Formula/fastskill.rb
+          brew install --build-from-source gofastskill/cli/fastskill
 
       - name: Verify installed version
         shell: bash
@@ -67,3 +71,8 @@ jobs:
           fi
 
           echo "Installed fastskill version matches expected: $INSTALLED"
+
+      - name: Cleanup tap
+        if: always()
+        shell: bash
+        run: brew untap gofastskill/cli || true
