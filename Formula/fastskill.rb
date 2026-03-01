@@ -6,6 +6,18 @@ class Fastskill < Formula
   homepage "https://github.com/gofastskill/fastskill"
   license "Apache-2.0"
 
+  on_macos do
+    on_arm do
+      url "https://github.com/gofastskill/fastskill/releases/download/v0.9.84/fastskill-aarch64-apple-darwin.tar.gz"
+      sha256 "96aa95a90fb839bd481b62ea9c4e3fecbeea9f014374a63c8fb4a0c3e748bfd0"
+    end
+
+    on_intel do
+      url "https://github.com/gofastskill/fastskill/releases/download/v0.9.84/fastskill-x86_64-apple-darwin.tar.gz"
+      sha256 "0d4629f6d11e23a21cb731c9ec33755943357382381106d69c1ffcf906061d97"
+    end
+  end
+
   on_linux do
     if Hardware::CPU.intel?
       # Detect glibc version to choose appropriate binary
@@ -18,11 +30,11 @@ class Fastskill < Formula
       end
 
       if glibc_version >= 2.38
-        url "https://github.com/gofastskill/fastskill/releases/download/v0.9.78/fastskill-x86_64-unknown-linux-gnu.tar.gz"
-        sha256 "51f0b54fdbb1103d91d5ff65498cff09b8b4ba0364de5b16fd9a6c1ec33e48e5"
+        url "https://github.com/gofastskill/fastskill/releases/download/v0.9.84/fastskill-x86_64-unknown-linux-gnu.tar.gz"
+        sha256 "0a719242a62be677b78e4b86a86a8b51816e46dc7c3ca4fff8466f4d20d9768a"
       else
-        url "https://github.com/gofastskill/fastskill/releases/download/v0.9.78/fastskill-x86_64-unknown-linux-musl.tar.gz"
-        sha256 "d22c738da45fe0eee98d7c11663d80a99c3b525d82789bda6079865bcc0ea793"
+        url "https://github.com/gofastskill/fastskill/releases/download/v0.9.84/fastskill-x86_64-unknown-linux-musl.tar.gz"
+        sha256 "cf14de868c450cbec0e17b33c2ae53322b241f78f8de20c948b2e55e2e2fbcff"
       end
     end
   end
