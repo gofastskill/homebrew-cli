@@ -38,12 +38,12 @@ jobs:
           echo "value=$EXPECTED" >> "$GITHUB_OUTPUT"
           echo "Expected version: $EXPECTED"
 
-      - name: Tap local repository
+      - name: Tap branch from GitHub
         shell: bash
         run: |
           set -euo pipefail
           brew untap gofastskill/cli || true
-          brew tap gofastskill/cli "$(pwd)"
+          brew tap gofastskill/cli https://github.com/gofastskill/homebrew-cli --branch "${{ github.ref_name }}"
           brew tap
 
       - name: Audit formula

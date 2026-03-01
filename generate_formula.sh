@@ -119,10 +119,12 @@ class ${FORMULA_CLASS} < Formula
   license "Apache-2.0"
 
   on_macos do
-    if Hardware::CPU.arm?
+    on_arm do
       url "${MACOS_ARM_ASSET_URL}"
       sha256 "${MACOS_ARM_SHA256}"
-    elsif Hardware::CPU.intel?
+    end
+
+    on_intel do
       url "${MACOS_INTEL_ASSET_URL}"
       sha256 "${MACOS_INTEL_SHA256}"
     end
