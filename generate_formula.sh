@@ -113,9 +113,8 @@ emit_formula() {
 # frozen_string_literal: true
 
 class ${FORMULA_CLASS} < Formula
-  desc "Fastskill - A fast skill management tool"
+  desc "Skill package manager and operational toolkit"
   homepage "https://github.com/${GITHUB_REPO}"
-  version "${VERSION}"
   license "Apache-2.0"
 
   on_macos do
@@ -156,7 +155,7 @@ class ${FORMULA_CLASS} < Formula
   end
 
   test do
-    system "#{bin}/${BINARY_NAME}", "--version"
+    system bin/"${BINARY_NAME}", "--version"
   end
 end
 FORMULA_EOF

@@ -2,9 +2,8 @@
 # frozen_string_literal: true
 
 class Fastskill < Formula
-  desc "Fastskill - A fast skill management tool"
+  desc "Skill package manager and operational toolkit"
   homepage "https://github.com/gofastskill/fastskill"
-  version "0.9.78"
   license "Apache-2.0"
 
   on_linux do
@@ -33,6 +32,6 @@ class Fastskill < Formula
   end
 
   test do
-    system "#{bin}/fastskill", "--version"
+    system bin/"fastskill", "--version"
   end
 end

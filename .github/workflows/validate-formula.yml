@@ -78,3 +78,9 @@ jobs:
           fi
 
           echo "Installed fastskill version matches expected: $INSTALLED"
+
+      - name: Cleanup tap
+        if: always()
+        shell: bash
+        run: |
+          brew untap gofastskill/cli || true
