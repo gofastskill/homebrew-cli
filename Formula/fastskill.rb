@@ -8,13 +8,13 @@ class Fastskill < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/gofastskill/fastskill/releases/download/v0.9.217/fastskill-aarch64-apple-darwin.tar.gz"
-      sha256 "166eadbf62672bd3a4b2abcbf4295cc56d388dc582eb8606ae4c2961b10fe01a"
+      url "https://github.com/gofastskill/fastskill/releases/download/v0.9.218/fastskill-aarch64-apple-darwin.tar.gz"
+      sha256 "485009ba9840e9670e2ac0ef34859edb33c73648e85044efff19bb979fc2e095"
     end
 
     on_intel do
-      url "https://github.com/gofastskill/fastskill/releases/download/v0.9.217/fastskill-x86_64-apple-darwin.tar.gz"
-      sha256 "351f02c079304566acbe0a7e7398fbd2727a7f8986305b9450c6ef4630c12326"
+      url "https://github.com/gofastskill/fastskill/releases/download/v0.9.218/fastskill-x86_64-apple-darwin.tar.gz"
+      sha256 "8ea3b168178bd428c934d06cb684b1d86144c5ec696fbce06c1af8d559ff72c6"
     end
   end
 
@@ -30,11 +30,11 @@ class Fastskill < Formula
       end
 
       if glibc_version >= 2.38
-        url "https://github.com/gofastskill/fastskill/releases/download/v0.9.217/fastskill-x86_64-unknown-linux-gnu.tar.gz"
-        sha256 "519abdd0d285c42f2dfc877effda655edd10a3ee5bc333a20c9530fa3880ca5c"
+        url "https://github.com/gofastskill/fastskill/releases/download/v0.9.218/fastskill-x86_64-unknown-linux-gnu.tar.gz"
+        sha256 "cd96ab5c5aa2373742af1dd8b448ccaaa886949704b362d124fd4625c09f9b53"
       else
-        url "https://github.com/gofastskill/fastskill/releases/download/v0.9.217/fastskill-x86_64-unknown-linux-musl.tar.gz"
-        sha256 "6200d02cd49a966b00bef6f17d43d263bee26efba1e75a69a6ab4256f1ab42b1"
+        url "https://github.com/gofastskill/fastskill/releases/download/v0.9.218/fastskill-x86_64-unknown-linux-musl.tar.gz"
+        sha256 "5fe022ae3c3aa56deed21ff5f616e221c646dad33e22debe5dfc2d9744fa7b01"
       end
     end
   end
