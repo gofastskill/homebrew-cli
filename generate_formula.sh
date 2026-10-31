@@ -5,7 +5,6 @@ set -euo pipefail
 # Usage: ./generate_formula.sh [--version VERSION]
 
 APP_NAME="fastskill"
-GITHUB_REPO="gofastskill/fastskill"
 FORMULA_CLASS="Fastskill"
 BINARY_NAME="fastskill"
 FORMULA_FILE="Formula/${APP_NAME}.rb"
@@ -41,62 +40,50 @@ parse_args() {
   exit 1
 }
 
+# Everything comes from FastSkill's download site, never from GitHub: the source repository is
+# private. Set DOWNLOAD_BASE to override.
+SITE="${DOWNLOAD_BASE:-https://get.gofastskill.com}"
+
+# "latest" is the stable track: /latest/<os>/<arch> redirects to /v/<version>/<file>.
 get_release_tag() {
   if [ "$VERSION" = "latest" ] || [ -z "$VERSION" ]; then
     echo "Fetching latest release..."
-    RELEASE_TAG=$(gh release view --repo "$GITHUB_REPO" --json tagName -q .tagName)
-    VERSION="${RELEASE_TAG#v}"
-  else
-    VERSION="${VERSION#v}"
-    RELEASE_TAG="v$VERSION"
-    if ! gh release view "$RELEASE_TAG" --repo "$GITHUB_REPO" >/dev/null 2>&1; then
-      echo "Error: release tag $RELEASE_TAG was not found"
+    local location
+    location=$(curl -fsS -o /dev/null -w '%{redirect_url}' "$SITE/latest/macos/arm64")
+    VERSION=$(printf '%s\n' "$location" | sed -n 's#^.*/v/\([^/]*\)/.*#\1#p')
+    if [ -z "$VERSION" ]; then
+      echo "Error: could not resolve the latest version from $SITE/latest/macos/arm64"
       exit 1
     fi
+  else
+    VERSION="${VERSION#v}"
+  fi
+  RELEASE_TAG="v$VERSION"
+
+  if ! CHECKSUMS=$(curl -fsSL "$SITE/v/$VERSION/checksums.txt"); then
+    echo "Error: $SITE has no checksums for $VERSION"
+    exit 1
   fi
 
   echo "Using release: $RELEASE_TAG"
   echo "Version: $VERSION"
 }
 
-# Downloads come from FastSkill's download site, never from GitHub: the source repository is
-# private. Set DOWNLOAD_BASE to override.
 asset_url_by_name() {
   local name="$1"
-  echo "${DOWNLOAD_BASE:-https://get.gofastskill.com}/v/${VERSION}/${name}"
+  echo "$SITE/v/${VERSION}/${name}"
 }
 
-asset_digest_by_name() {
-  local name="$1"
-  echo "$RELEASE_DATA" | jq -r --arg name "$name" '.assets[] | select(.name == $name) | .digest' | head -1
-}
-
-calc_sha256() {
-  local file="$1"
-  if command -v sha256sum >/dev/null 2>&1; then
-    sha256sum "$file" | awk '{print $1}'
-  else
-    shasum -a 256 "$file" | awk '{print $1}'
-  fi
-}
-
+# The sha256 that checksums.txt lists for the file, or an error when it lists none.
 asset_sha_by_name() {
   local name="$1"
-  local url="$2"
-  local digest
-  digest=$(asset_digest_by_name "$name")
-
-  if [ -n "$digest" ] && [ "$digest" != "null" ] && [[ "$digest" == sha256:* ]]; then
-    echo "${digest#sha256:}"
-    return
+  local sha
+  sha=$(printf '%s\n' "$CHECKSUMS" | awk -v n="$name" '$2 == n || $2 == "*" n { print $1; exit }')
+  if [ -z "$sha" ]; then
+    echo "Error: $VERSION has no file named $name" >&2
+    exit 1
   fi
-
-  echo "Digest missing for $name, falling back to local SHA256 computation"
-  local tmp_file
-  tmp_file=$(mktemp)
-  curl -fsSL "$url" -o "$tmp_file"
-  calc_sha256 "$tmp_file"
-  rm -f "$tmp_file"
+  echo "$sha"
 }
 
 ensure_asset_present() {
@@ -166,18 +153,9 @@ FORMULA_EOF
 main() {
   parse_args "$@"
 
-  require_cmd gh "Install gh from https://cli.github.com/"
-  require_cmd jq "Install jq from https://jqlang.github.io/jq/"
-  require_cmd curl "Install curl to enable checksum fallback"
-
-  if ! gh auth status >/dev/null 2>&1; then
-    echo "Error: GitHub CLI is not authenticated"
-    echo "Please run: gh auth login"
-    exit 1
-  fi
+  require_cmd curl "Install curl"
 
   get_release_tag
-  RELEASE_DATA=$(gh api "repos/$GITHUB_REPO/releases/tags/$RELEASE_TAG")
 
   LINUX_GNU_ASSET_URL=$(asset_url_by_name "$LINUX_GNU_ASSET_NAME")
   LINUX_MUSL_ASSET_URL=$(asset_url_by_name "$LINUX_MUSL_ASSET_NAME")
@@ -189,10 +167,10 @@ main() {
   ensure_asset_present "$MACOS_ARM_ASSET_NAME" "$MACOS_ARM_ASSET_URL"
   ensure_asset_present "$MACOS_INTEL_ASSET_NAME" "$MACOS_INTEL_ASSET_URL"
 
-  LINUX_GNU_SHA256=$(asset_sha_by_name "$LINUX_GNU_ASSET_NAME" "$LINUX_GNU_ASSET_URL")
-  LINUX_MUSL_SHA256=$(asset_sha_by_name "$LINUX_MUSL_ASSET_NAME" "$LINUX_MUSL_ASSET_URL")
-  MACOS_ARM_SHA256=$(asset_sha_by_name "$MACOS_ARM_ASSET_NAME" "$MACOS_ARM_ASSET_URL")
-  MACOS_INTEL_SHA256=$(asset_sha_by_name "$MACOS_INTEL_ASSET_NAME" "$MACOS_INTEL_ASSET_URL")
+  LINUX_GNU_SHA256=$(asset_sha_by_name "$LINUX_GNU_ASSET_NAME")
+  LINUX_MUSL_SHA256=$(asset_sha_by_name "$LINUX_MUSL_ASSET_NAME")
+  MACOS_ARM_SHA256=$(asset_sha_by_name "$MACOS_ARM_ASSET_NAME")
+  MACOS_INTEL_SHA256=$(asset_sha_by_name "$MACOS_INTEL_ASSET_NAME")
 
   emit_formula
 
