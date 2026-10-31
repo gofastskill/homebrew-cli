@@ -59,9 +59,11 @@ get_release_tag() {
   echo "Version: $VERSION"
 }
 
+# Downloads come from FastSkill's download site, never from GitHub: the source repository is
+# private. Set DOWNLOAD_BASE to override.
 asset_url_by_name() {
   local name="$1"
-  echo "$RELEASE_DATA" | jq -r --arg name "$name" '.assets[] | select(.name == $name) | .browser_download_url' | head -1
+  echo "${DOWNLOAD_BASE:-https://get.gofastskill.com}/v/${VERSION}/${name}"
 }
 
 asset_digest_by_name() {
@@ -114,7 +116,7 @@ emit_formula() {
 
 class ${FORMULA_CLASS} < Formula
   desc "Skill package manager and operational toolkit"
-  homepage "https://github.com/${GITHUB_REPO}"
+  homepage "https://gofastskill.com"
   license "Apache-2.0"
 
   on_macos do
