@@ -12,23 +12,7 @@ homebrew-cli/
 
 ## Updating the Formula
 
-When a new version of fastskill is released:
-
-1. Update the `version` in `Formula/fastskill.rb`
-2. Update the `url` to point to the new release
-3. Calculate the new SHA256 checksum:
-   ```bash
-   curl -sL https://github.com/gofastskill/fastskill/releases/download/vX.Y.Z/fastskill-x86_64-unknown-linux-gnu.tar.gz | shasum -a 256
-   ```
-4. Update the `sha256` value in the formula
-5. Test the installation locally:
-   ```bash
-   brew install --build-from-source Formula/fastskill.rb
-   ```
-6. Verify it works:
-   ```bash
-   fastskill --version
-   ```
+`Formula/fastskill.rb` is generated and committed automatically for each stable release of fastskill. Do not edit it by hand: the next release overwrites it. Changes to the formula's contents belong in the generator, so open an issue here if something in it is wrong.
 
 ## Testing
 
